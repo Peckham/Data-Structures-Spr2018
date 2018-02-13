@@ -1,5 +1,6 @@
 # Created by Tavish Peckham on 2.12.18
-from math import factorial
+from math import factorial as fac
+# numChoices = fac(len(cast)) / fac(numStars) * fac(len(cast) - numStars)
 
 def q2(x, n):
     if(n > 1): return x * q2(x, n - 1)
@@ -15,25 +16,26 @@ def q3(n):
     return total
 
 def q4(l, i = 0):
-    # if i == len(l) - 1: return True
-    # elif l[i] in l[i+1:]: return False
-    # else: return q4(l, i+1)
-    if map(lambda x: x in l[i:], l): return False
-    return True
+    # Fun one-line iterative solution:
+    # return not any(map(lambda x: l[x] in l[x + 1:], list(range(len(l)))))
+    if i == len(l) - 1: return True
+    elif l[i] in l[i+1:]: return False
+    else: return q4(l, i+1)
+
 
 # Alternative Base case: The summation of our rows is 2n.
 # This would require:
 # if reduce(lambda x, y : x + y, p[-1]) == 2n: return pasc
 def q5(n):
     pasc = [[1], [1, 1]]
-    if(n == 1): return pasc[0]
-    elif(n == 2): return pasc[:]
-    else: _q5(n)
     def _q5(n):
-        if(n == 0): return pasc
+        if(n == 1): return pasc
         else:
             pasc.append([1] + [pasc[-1][i] + pasc[-1][i+1] for i in range(len(pasc[-1]) - 1)] + [1])
             return _q5(n - 1)
+    if(n == 1): return pasc[0]
+    elif(n == 2): return pasc[:]
+    else: return _q5(n)
 
 """
 Start by creating empty list to hold list of all possible stars.
@@ -43,32 +45,36 @@ We stop when no more stars can be added, so cast[i+numStars] > len(cast).
 Then recurse, with cast[1:] and again stop when our number of star groups
 equals the calculated amount.
 
-Alternatively, we could terminate the recursion when len(cast) < numStars.
+Alternatively, we could terminate the recursion when len(cast1) == numStars.
 """
 def q6(cast, numStars):
-    fac = math.factorial
-    numChoices = fac(len(cast)) / fac(numStars) * fac(len(cast) - numStars)
+    if numStars == 1: return cast
     stars = []
-    _q6(cast, numStars)
-    def _q6(cast, numStars):
-        for i in range(1, len(cast) - numStars):
-            stars.append(list(cast[0]) + cast[i:i + numStars - 1])
-        if(len(stars) == numChoices): return stars
-        else: _q6(cast[1:], numStars)
+    def _q6(cast1, numStars):
+        for i in range(1, len(cast1) - numStars + 2):
+            stars.append(list(cast1[:1] + (cast1[i:i + numStars - 1])))
+        if(len(cast1) == numStars):
+            for i in stars: print(str(i) + "\n")
+        else: _q6(cast1[1:], numStars)
+    return _q6(cast[:], numStars)
+
 
 def main():
-    lis = [1, 2, 3, 4, 5, 6, 7, 8, 4]
+    lis = [1, 2, 3, 4, 5, 6, 7, 8]
+    lis1 = [1, 2, 3, 4, 5, 6, 7, 8, 5]
     cast = ["Russell Crowe", "Johnny Depp", "Al Pacino",
-            "Denzel Washington", "Brad Pitt", "Jim Carrey"]
-    # print("Question 2: Recursive Power")
-    # print(q2(5, 3))
-    # print("Question 3: Write the function in iterative form")
-    # print(q3(100))
-    # print("Question 4: Element Uniqueness Problem")
-    # print(q4(lis))
-    print("Question 5: Pascal's Triangle")
-    print(q5(5))
-    print("Question 6: All Possible Combinations")
-    print(q6(cast), 3)
+            "Denzel Washington", "Brad Pitt", "Jim Carrey", "Robert De Niro"]
 
+    print("\nQuestion 2: Recursive Power")
+    print(q2(5, 3))
+    print("\nQuestion 3: Write the function in iterative form")
+    print(q3(100))
+    print("\nQuestion 4: Element Uniqueness Problem")
+    print(q4(lis))
+    print(q4(lis1))
+    print("\nQuestion 5: Pascal's Triangle")
+    print(*q5(7), sep = "\n")
+    print("\nQuestion 6: All Possible Combinations")
+    print("The entire cast: " + str(cast))
+    q6(cast, 4)
 main()
