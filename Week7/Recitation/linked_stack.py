@@ -1,25 +1,6 @@
-# Copyright 2013, Michael H. Goldwasser
-#
-# Developed for use with the book:
-#
-#    Data Structures and Algorithms in Python
-#    Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser
-#    John Wiley & Sons, 2013
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from exceptions import Empty
+class Empty(BaseException):
+    def __init__(self, message):
+        self.message = message
 
 
 class LinkedStack:
@@ -55,12 +36,13 @@ class LinkedStack:
         """
         if self.is_empty():
             raise Empty('Stack is empty')
-        return self._head._element            # top of stack is at head of list
+        return self._head._element  # top of stack is at head of list
 
     def push(self, e):
         """Add element e to the top of the stack."""
-        toPush = self._Node(e, None)
-        self._head._next = toPush
+        # Create a new link node and link it
+        node = self._Node(e, self._head)
+        self._head = node
         self._size += 1
 
     def pop(self):
@@ -70,19 +52,27 @@ class LinkedStack:
         """
         if self.is_empty():
             raise Empty('Stack is empty')
-        # Delete node from Stack
-        # to do
-        
+        toReturn = self.top()
+        self._head = self._head._next
+        self._size -= 1
+        return toReturn
 
     def unOrderedSearch(self, target):
             # Search for the target element in the Stack
-            # to do
-        pass
+        currentNode = self._head
+        while currentNode._element is not target and currentNode is not None:
+            currentNode = currentNode._next
+        else:
+            return currentNode is not None
 
     def printAll(self):
         # print the contents of the Stack
-        # to do
-        pass
+        output = []
+        currentNode = self._head
+        while currentNode is not None:
+            output.append(str(currentNode._element))
+            currentNode = currentNode._next
+        return " ".join(output)
 
 
 linkedStack1 = LinkedStack()
@@ -92,7 +82,7 @@ linkedStack1.push(22)
 linkedStack1.push(35)
 
 print(linkedStack1.unOrderedSearch(10))
-print("Stack contents: " + linkedStack1.printAll())
+print("Stack contents: " + linkedStack1.printAll())   # head --> 35 22 10 5
 print(linkedStack1.pop())
 print(linkedStack1.pop())
-print("Stack contents: " + linkedStack1.printAll())
+print("Stack contents: " + linkedStack1.printAll())   # head --> 10 5

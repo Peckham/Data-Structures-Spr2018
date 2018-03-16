@@ -17,10 +17,16 @@ class BoostQueue():
         # If k is too big (greater or equal to the number of elements in the
         # queue) the last element will become the first.
         # No return value.
-        pass
+        if self.is_empty():
+            raise Empty()
+        if k >= self._size:
+            self._data = [self._data[-1]] + self._data[:-1]
+        else:
+            self._data = self._data[:self._front - k - 1] + [
+                self._data[-1]] + self._data[self._front - k - 1: -1]
 
     def enqueue(self, e):
-        if (self.is_full()):
+        if self.is_full():
             raise Full()
         self._data[(self._front + self._size) % len(self._data)] = e
         self._size += 1
@@ -46,7 +52,7 @@ class BoostQueue():
         return (self._size == len(self._data))
 
     def __str__(self):
-        return str(self._data)
+        return " ".join(self._data)
 
 
 queue = BoostQueue()
@@ -58,3 +64,5 @@ queue.enqueue('e')
 print(queue)    # a b c d e
 queue.boost(3)  # boost e by 3
 print(queue)    # a e b c d
+queue.boost(10)  # boost d by 10
+print(queue)  # d a e b c

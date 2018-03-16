@@ -9,15 +9,17 @@ class LeakyStack():
         self._top = 0  # Use this variable to make the stack circular
 
     def push(self, e):  # O(1)
-        self._data[(self._top + self._size) % len(self._data)] = e
-        self._size += 1
-        # What if our leaky stack is full?
+        self._data[self._top] = e
+        self._top = (self._top + 1) % len(self._data)
+        if self._size < len(self._data):
+            self._size += 1
 
     def pop(self):  # O(1)
         if self.is_empty():
             raise Empty()
-        out = self._data[(self._front + self._size - 1) % len(self._data)]
-        self._data[(self._front + self._size - 1) % len(self._data)] = None
+        self._top = (self._top - 1) % len(self._data)
+        out = self._data[self._top]
+        self._data[self._top] = None
         self._size -= 1
         return out
 
@@ -28,7 +30,9 @@ class LeakyStack():
         return self._size == 0
 
     def __str__(self):  # O(n) or O(1) up to you
-        return str(self._data)
+        return " ".join([i for i in (self._data[self._top:] +
+                        self._data[:self._top])[::-1] if i is not None])
+
 
 # TEST CODES
 
@@ -45,3 +49,4 @@ leakystack.push('f')
 print(leakystack)   # f e d c b,   a is gone because it is the oldest.
 print(leakystack.pop())  # f popped
 print(leakystack.pop())  # e popped
+print(leakystack)  # d c b

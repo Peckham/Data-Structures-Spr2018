@@ -8,39 +8,51 @@ class SharedMemoryStack():
         self.stack2_size = 0
 
     def pushStack1(self, e):
-        pass
+        if not self.is_full():
+            self._data[self.stack1_size] = e
+            self.stack1_size += 1
 
     def pushStack2(self, e):
-        pass
+        if not self.is_full():
+            self.stack2_size += 1
+            self._data[-self.stack2_size] = e
 
     def popStack1(self):
-        pass
+        if not self.is_empty1():
+            toReturn = self._data[self.stack1_size - 1]
+            self.stack1_size -= 1
+            return toReturn
 
     def popStack2(self):
-        pass
+        if not self.is_empty2():
+            toReturn = self._data[-self.stack2_size]
+            self.stack2_size -= 1
+            return toReturn
 
     def is_full(self):
-        pass
+        if self.stack1_size + self.stack1_size == len(self._data):
+            raise Full()
 
     def is_empty1(self):
-        pass
+        return self.stack1_size == 0
 
     def is_empty2(self):
-        pass
+        return self.stack2_size == 0
 
     def peekStack1(self):
-        pass
+        return self._data[self.stack1_size]
 
     def peekStack2(self):
-        pass
+        return self._data[-self.stack2_size]
 
     def __str__(self):
         result = []
         result.append("Stack 1: ")
-        # Your code 1 to show stack 1
-        result.append("STack 2: ")
-        # Your code 2 to show stack 2
-
+        for i in range(self.stack1_size):
+            result.append(str(self._data[i]) + " ")
+        result.append("Stack 2: ")
+        for i in range(1, self.stack2_size + 1):
+            result.append(str(self._data[-i]) + " ")
         return "".join(result)
 
 
@@ -58,4 +70,7 @@ stack.pushStack2(10)
 print(stack)  # Stack 1: 1, 2, 3, 4; Stack 2: 5, 6, 7, 8, 9, 10
 print("Popping: ", stack.popStack1())  # popped 4
 stack.pushStack2(11)  # Stack 1: 1, 2, 3; Stack 2: 5, 6, 7, 8, 9, 10, 11
+print(stack)
+print("Popping: ", stack.popStack2())  # popped 11
+print("Popping: ", stack.popStack2())  # popped 10
 print(stack)

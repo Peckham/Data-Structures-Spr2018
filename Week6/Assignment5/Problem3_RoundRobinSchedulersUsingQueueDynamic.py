@@ -69,8 +69,9 @@ class ArrayQueue:
         # to do
         # don't Q.enqueue(Q.dequeue( ))
         # just swap
-        pass
-
+        self._data[(self._front + self._size) % len(self._data)] = self._data[self._front]
+        self._data[self._front] = None
+        self._front = (self._front + self._size + 1) % self._size
 
 queue1 = ArrayQueue()
 queue1.enqueue(3)
