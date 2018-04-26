@@ -71,7 +71,7 @@ class ArrayQueue:
         # just swap
         self._data[(self._front + self._size) % len(self._data)] = self._data[self._front]
         self._data[self._front] = None
-        self._front = (self._front + self._size + 1) % self._size
+        self._front = (self._front + len(self._data) + 1) % len(self._data)
 
 queue1 = ArrayQueue()
 queue1.enqueue(3)
@@ -101,3 +101,9 @@ queue1.rotate()
 print("4. Length of Queue: ", len(queue1))
 # Output: 4. After Rotating, Current Contents of Queue:  [7, None, None, 9, 5]
 print("4. After Rotating, Current Contents of Queue: ", queue1)
+
+queue1.rotate()
+queue1.rotate()
+queue1.rotate()
+# Output 5. Rotate 3 times... Broken?
+print("5. Rotate 3 Times", queue1)

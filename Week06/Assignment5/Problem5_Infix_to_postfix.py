@@ -54,3 +54,4 @@ def infix_to_postfix(string):
 infix_to_postfix("( 3 + 2 ) / 4 + ( 3 * 2 + 4 )")  # 3 2 + 4 / 3 2 * 4 + +
 infix_to_postfix("X + Y / ( 5 * Z ) + 10")  # X Y 5 Z * / + 10 +
 infix_to_postfix("( ( ( X + Y ) * Z ) + 2 ) * 3 - 2")  # X Y + Z * 2 + 3 * 2 -
+print("\n")
