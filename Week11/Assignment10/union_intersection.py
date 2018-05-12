@@ -1,3 +1,6 @@
+from probe_hash_map import ProbeHashMap
+
+
 class SingleLinkedList:
 
     class _Node:
@@ -8,18 +11,14 @@ class SingleLinkedList:
             self._element = element               # reference to user's element
             self._next = next                     # reference to next node
 
-
-
     def __init__(self):
         """Create an empty linkedlist."""
         self._head = None
         self._size = 0
 
-
     def __len__(self):
         """Return the number of elements in the linkedlist."""
         return self._size
-
 
     def is_empty(self):
         """Return True if the linkedlist is empty."""
@@ -34,17 +33,12 @@ class SingleLinkedList:
             raise Empty('list is empty')
         return self._head._element              # head of list
 
-
-
     def insert_from_head(self, e):
         """Add element e to the head of the linkedlist."""
         # Create a new link node and link it
         new_node = self._Node(e, self._head)
         self._head = new_node
         self._size += 1
-        
-
-
 
     def delete_from_head(self):
         """Remove and return the element from the head of the linkedlist.
@@ -78,8 +72,21 @@ def union(l1, l2):
 
         return: union of l1 and l2, as a SingleLinkedList.
     '''
-    # To do
-    pass
+
+    toReturn = SingleLinkedList()
+    unionMap = ProbeHashMap()
+    curNode1 = l1._head
+    curNode2 = l2._head
+    while curNode1 is not None:
+        unionMap[curNode1._element] = curNode1._element
+        curNode1 = curNode1._next
+    while curNode2 is not None:
+        unionMap[curNode2._element] = curNode2._element
+        curNode2 = curNode2._next
+    for i in unionMap:
+        toReturn.insert_from_head(i)
+    return toReturn
+
 
 def intersection(l1, l2):
     ''' Return a new SingleLinkedList of the intersection of l1 and l2.
@@ -90,8 +97,26 @@ def intersection(l1, l2):
 
         return: intersection of l1 and l2, as a SingleLinkedList.
     '''
-    # To do
-    pass
+
+    toReturn = SingleLinkedList()
+    interMap = ProbeHashMap()
+    curNode1 = l1._head
+    curNode2 = l2._head
+    while curNode1 is not None:
+        interMap[curNode1._element] = False
+        curNode1 = curNode1._next
+    while curNode2 is not None:
+        try:
+            if interMap[curNode2._element] is False:
+                interMap[curNode2._element] = True
+                curNode2 = curNode2._next
+        except(KeyError):
+            curNode2 = curNode2._next
+            pass
+    for i in interMap:
+        if interMap[i]:
+            toReturn.insert_from_head(i)
+    return toReturn
 
 
 def main():
@@ -110,5 +135,5 @@ def main():
     print(union(l1, l2))
     print(intersection(l1, l2))
 
+
 main()
-    
